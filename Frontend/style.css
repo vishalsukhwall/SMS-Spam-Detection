@@ -1,0 +1,142 @@
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --primary: #4a90e2;
+    --spam-color: #e74c3c;
+    --ham-color: #2ecc71;
+    --text-color: #333;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container Card */
+.container {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    
+    /* Smooth background color transition */
+    transition: all 0.4s ease;
+}
+
+h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    text-align: center;
+    transition: color 0.4s ease;
+}
+
+.subtitle {
+    text-align: center; 
+    color: #666;
+    transition: color 0.4s ease;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+button {
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: #357abd;
+}
+
+/* Result Box Inside Container */
+.result-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    display: none; /* Hidden by default */
+    transition: all 0.3s ease;
+}
+
+.result-box.loading {
+    display: block;
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ccc;
+}
+
+/* ===================================================
+   STATE CLASSES (Toggled via JS to change full card)
+   =================================================== */
+
+/* 🟢 SAFE / HAM STATE (Entire Container Turns Green) */
+.container.is-safe {
+    background-color: #e8f8f0;
+    border-color: var(--ham-color);
+    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.25);
+}
+
+.container.is-safe h2,
+.container.is-safe .subtitle {
+    color: #1e7e44;
+}
+
+.container.is-safe .result-box {
+    display: block;
+    background-color: #2ecc71;
+    color: #ffffff;
+    border: none;
+}
+
+/* 🔴 SPAM STATE (Entire Container Turns Red) */
+.container.is-spam {
+    background-color: #fde8e7;
+    border-color: var(--spam-color);
+    box-shadow: 0 10px 25px rgba(231, 76, 60, 0.25);
+}
+
+.container.is-spam h2,
+.container.is-spam .subtitle {
+    color: #962d22;
+}
+
+.container.is-spam .result-box {
+    display: block;
+    background-color: #e74c3c;
+    color: #ffffff;
+    border: none;
+}
