@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 🛡️ Spam Detection Machine Learning Pipeline
 A lightweight, robust machine learning pipeline for text classification designed to distinguish between legitimate messages (ham) and unwanted spam using Natural Language Processing (NLP).
 
@@ -29,3 +30,6 @@ Feature Extraction: The text messages are converted into numerical TF-IDF featur
 Model Training: A Multinomial Naive Bayes algorithm is trained on the vectorized training data.
 
 Artifact Saving: Both the trained classification model (spam_model.pkl) and the fitted text vectorizer (vectorizer.pkl) are serialized and saved inside a dedicated model/ directory for real-time inference.
+=======
+# SMS-Spam-Detection
+>>>>>>> 5e8b08472828446e4e6fac1e57730dfe2c3bb8b3
