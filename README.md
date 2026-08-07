@@ -9,53 +9,34 @@
 
 A lightweight, robust machine learning pipeline and web application for text classification, designed to instantly distinguish between legitimate messages (**ham**) and unwanted **spam** using Natural Language Processing (NLP).
 
-</div>
+🚀 Overview
+This project implements a binary text classification model using Python and scikit-learn. It processes text data via TF-IDF (Term Frequency-Inverse Document Frequency) vectorization and trains a Multinomial Naive Bayes classifier to accurately detect spam messages based on textual patterns and keywords.
 
----
+🛠️ Tech Stack & Libraries
+Python (Programming Language)
 
-## 🚀 Overview
+Pandas (Data Manipulation)
 
-This project implements a binary text classification model using Python and `scikit-learn`. It processes raw text data via **TF-IDF (Term Frequency-Inverse Document Frequency)** vectorization and trains a **Multinomial Naive Bayes** classifier to accurately detect spam messages based on textual patterns and keywords. It features a complete backend-frontend architecture for real-time predictions.
+Scikit-Learn (Machine Learning & NLP Utilities)
 
----
+TfidfVectorizer for text feature extraction
 
-## 🛠️ Tech Stack & Libraries
+MultinomialNB for classification
 
-*   **Programming Language:** Python
-*   **Data Manipulation:** Pandas
-*   **Machine Learning & NLP:** 
-    *   `Scikit-Learn` (`TfidfVectorizer`, `MultinomialNB`, `train_test_split`)
-*   **Model Persistence:** Joblib
-*   **Backend & Frontend:** Flask, HTML, CSS, JavaScript
+train_test_split for dataset partitioning
 
----
+Joblib (Model Serialization / Persistence)
 
-## ⚙️ How It Works
+⚙️ How It Works
+Dataset Preparation: A structured DataFrame containing messages tagged as either ham or spam is loaded. Labels are mapped numerically (ham = 0, spam = 1).
 
-1. **Dataset Preparation:** A structured DataFrame containing text messages tagged as either `ham` or `spam` is loaded. Labels are mapped numerically (`ham` = 0, `spam` = 1).
-2. **Data Splitting:** The dataset is partitioned into training and testing sets to evaluate model generalization.
-3. **Feature Extraction:** Text messages are transformed into numerical feature matrices using **TF-IDF**, filtering out English stop words.
-4. **Model Training:** A **Multinomial Naive Bayes** algorithm is trained on the vectorized corpus.
-5. **Artifact Saving:** Both the trained classification model (`spam_model.pkl`) and the fitted text vectorizer (`vectorizer.pkl`) are serialized and stored inside the `model/` directory for fast real-time inference.
+Data Splitting: The data is divided into training and testing sets to evaluate generalization capability.
 
----
+Feature Extraction: The text messages are converted into numerical TF-IDF feature matrices while filtering out English stop words.
 
-## 📂 Project Structure
+Model Training: A Multinomial Naive Bayes algorithm is trained on the vectorized training data.
 
-```text
-SMS-Spam-Detection/
-│
-├── Backend/
-│   ├── model/
-│   │   ├── spam_model.pkl      # Trained Naive Bayes classifier
-│   │   └── vectorizer.pkl      # Fitted TF-IDF vectorizer
-│   ├── server.py               # Flask API server
-│   ├── train_model.py          # Script for data processing & training
-│   └── requirements.txt        # Python dependencies
-│
-├── Frontend/
-│   ├── index.html              # Web interface UI
-│   ├── style.css               # UI styling
-│   └── script.js               # Frontend logic & API calls
-│
-└── README.md                   # Project documentation
+Artifact Saving: Both the trained classification model (spam_model.pkl) and the fitted text vectorizer (vectorizer.pkl) are serialized and saved inside a dedicated model/ directory for real-time inference.
+=======
+# SMS-Spam-Detection
+>>>>>>> 5e8b08472828446e4e6fac1e57730dfe2c3bb8b3
