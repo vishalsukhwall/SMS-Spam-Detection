@@ -3,21 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Spam Detector</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NeuralGuard | AI Spam Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Default Dark Pink Theme */
+            --bg-deep: #190510;
+            --surface: #260a19;
+            --surface-glass: rgba(38, 10, 25, 0.75);
+            --border: rgba(244, 63, 94, 0.15);
+            --primary: #f43f5e;
+            --primary-hover: #e11d48;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-glow: rgba(244, 63, 94, 0.15);
+            
+            --danger: #f43f5e;
+            --danger-bg: rgba(244, 63, 94, 0.1);
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Dynamic Theme Overrides */
+        body.theme-safe {
+            --bg-deep: #04140c;
+            --surface: #062315;
+            --surface-glass: rgba(6, 35, 21, 0.8);
+            --border: rgba(16, 185, 129, 0.3);
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.2);
+        }
+
+        body.theme-danger {
+            --bg-deep: #190507;
+            --surface: #2a0b10;
+            --surface-glass: rgba(42, 11, 16, 0.8);
+            --border: rgba(244, 63, 94, 0.3);
+            --primary: #f43f5e;
+            --primary-hover: #e11d48;
+            --accent-glow: rgba(244, 63, 94, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 50% -20%, var(--accent-glow) 0%, transparent 60%);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            transition: background-color 0.5s ease;
+        }
+
+        .main-card {
+            width: 100%;
+            max-width: 580px;
+            background: var(--surface-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #fff;
+            box-shadow: 0 8px 16px var(--accent-glow);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .header-text h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 1.25rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 140px;
+            background: rgba(3, 7, 18, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+
+        textarea::placeholder {
+            color: #475569;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .char-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.4s ease;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .clear-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.4s ease;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* Result Panel Styling */
+        .result-box {
+            background: rgba(3, 7, 18, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: border-color 0.4s ease;
+        }
+
+        .result-box.hidden {
+            display: none;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+        }
+
+        .badge.spam {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .badge.ham {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .confidence {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .confidence span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.8s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        .progress-bar-fill.spam { background: var(--danger); }
+        .progress-bar-fill.ham { background: var(--success); }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            transition: border-color 0.4s ease;
+        }
+    </style>
 </head>
 <body>
 
-<!-- mainContainer ID add kar di hai taaki JS poora box color change kar sake -->
-<div class="container" id="mainContainer">
-    <h2>💬 SMS Spam Detector</h2>
-    <p class="subtitle">Analyze your messages here.</p>
-    
-    <textarea id="messageInput" placeholder="Type or paste your SMS text here..."></textarea>
-    <button id="checkBtn">Analyze Message</button>
+    <div class="main-card" id="mainContainer">
+        <div class="header">
+            <div class="header-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="header-text">
+                <h1>NeuralGuard AI</h1>
+                <p>Real-time SMS spam classification engine</p>
+            </div>
+        </div>
 
-    <div id="result" class="result-box"></div>
-</div>
+        <div class="input-box">
+            <textarea 
+                id="messageInput" 
+                placeholder="Type or paste message text here to scan..."
+                maxlength="500"
+            ></textarea>
+        </div>
+
+        <div class="controls">
+            <span class="char-count"><span id="charCount">0</span>/500</span>
+            <div class="btn-group">
+                <button class="clear-btn" id="clearBtn" title="Reset">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button id="checkBtn" class="action-btn">
+                    <span>Detect Spam</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Card -->
+        <div id="result" class="result-box hidden">
+            <div class="result-header">
+                <div id="statusBadge" class="badge">
+                    <i id="statusIcon" class="fa-solid"></i>
+                    <span id="statusText">SPAM</span>
+                </div>
+                <div class="confidence">
+                    Confidence: <span id="confidenceScore">0%</span>
+                </div>
+            </div>
+
+            <div class="progress-bar-bg">
+                <div id="riskProgressBar" class="progress-bar-fill"></div>
+            </div>
+
+            <div class="chips" id="signalsChips">
+                <!-- Dynamically injected indicator tags -->
+            </div>
+        </div>
+    </div>
 
 <script src="script.js"></script>
 </body>
