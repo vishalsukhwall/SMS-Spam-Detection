@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Spam Detection</title>
+    <title>NeuralGuard | AI Spam Detection</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Default Dark Pink Theme */
+            /* Base Theme: Dark Pink */
             --bg-deep: #190510;
             --surface: #260a19;
             --surface-glass: rgba(38, 10, 25, 0.75);
@@ -25,25 +25,26 @@
             --success-bg: rgba(16, 185, 129, 0.1);
         }
 
-        /* Dynamic Theme Overrides */
+        /* Safe State: Entire Theme Shifts to Dark Green */
         body.theme-safe {
-            --bg-deep: #04140c;
-            --surface: #062315;
-            --surface-glass: rgba(6, 35, 21, 0.8);
+            --bg-deep: #031409;
+            --surface: #062410;
+            --surface-glass: rgba(6, 36, 16, 0.85);
             --border: rgba(16, 185, 129, 0.3);
             --primary: #10b981;
             --primary-hover: #059669;
-            --accent-glow: rgba(16, 185, 129, 0.2);
+            --accent-glow: rgba(16, 185, 129, 0.25);
         }
 
+        /* Danger State: Entire Theme Shifts to Dark Red */
         body.theme-danger {
-            --bg-deep: #190507;
-            --surface: #2a0b10;
-            --surface-glass: rgba(42, 11, 16, 0.8);
+            --bg-deep: #1c0307;
+            --surface: #2b060b;
+            --surface-glass: rgba(43, 6, 11, 0.85);
             --border: rgba(244, 63, 94, 0.3);
             --primary: #f43f5e;
             --primary-hover: #e11d48;
-            --accent-glow: rgba(244, 63, 94, 0.2);
+            --accent-glow: rgba(244, 63, 94, 0.25);
         }
 
         * {
@@ -63,7 +64,7 @@
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
-            transition: background-color 0.5s ease;
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-image 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .main-card {
@@ -78,7 +79,7 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header {
@@ -99,7 +100,7 @@
             font-size: 1.25rem;
             color: #fff;
             box-shadow: 0 8px 16px var(--accent-glow);
-            transition: background 0.4s ease, box-shadow 0.4s ease;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header-text h1 {
@@ -132,7 +133,7 @@
             line-height: 1.5;
             resize: none;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.4s ease;
         }
 
         textarea:focus {
@@ -174,7 +175,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.4s ease;
+            transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 12px var(--accent-glow);
         }
 
@@ -197,7 +198,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background 0.2s, color 0.2s, border-color 0.4s ease;
+            transition: all 0.4s ease;
         }
 
         .clear-btn:hover {
@@ -214,7 +215,7 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transition: border-color 0.4s ease;
         }
 

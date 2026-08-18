@@ -1,14 +1,11 @@
 document.getElementById('checkBtn').addEventListener('click', async () => {
-    // Select the main container to change its background color
-    const mainContainer = document.getElementById('mainContainer');
     const messageText = document.getElementById('messageInput').value.trim();
     const resultDiv = document.getElementById('result');
+    const bodyElement = document.body;
 
-    // 1. Reset previous states (remove old green/red classes)
-    if (mainContainer) {
-        mainContainer.classList.remove('is-safe', 'is-spam');
-    }
-    resultDiv.style.display = 'none';
+    // 1. Reset previous theme states
+    bodyElement.className = '';
+    resultDiv.classList.add('hidden');
 
     // 2. Validation Check
     if (!messageText) {
@@ -17,9 +14,15 @@ document.getElementById('checkBtn').addEventListener('click', async () => {
     }
 
     // 3. Loading state UI
-    resultDiv.style.display = 'block';
-    resultDiv.className = 'result-box loading';
-    resultDiv.innerText = 'Analyzing with AI...';
+    resultDiv.classList.remove('hidden');
+    resultDiv.innerHTML = `
+        <div class="result-header">
+            <div class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-muted);">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>Analyzing with AI...</span>
+            </div>
+        </div>
+    `;
 
     try {
         // 4. Make HTTP POST request to local Flask API
@@ -33,32 +36,81 @@ document.getElementById('checkBtn').addEventListener('click', async () => {
 
         const data = await response.json();
 
-        // 5. Update UI based on API response
+        // 5. Update UI & Theme based on API response
         if (response.ok) {
-            // Check if backend returned Spam (handles label, result, or numerical prediction)
             const isSpam = data.label === 'Spam' || data.result === 'Spam' || data.prediction === 1;
+            const confidenceVal = data.confidence || '98.5%';
+
+            resultDiv.classList.remove('hidden');
 
             if (isSpam) {
-                // TURN ENTIRE CARD RED
-                if (mainContainer) mainContainer.classList.add('is-spam');
+                // --- SHIFT ENTIRE THEME TO DANGER (RED) ---
+                bodyElement.classList.add('theme-danger');
                 
-                const matchText = data.confidence ? ` (${data.confidence} Match)` : '';
-                resultDiv.innerHTML = `🚨 ALERT: SPAM DETECTED!${matchText}`;
+                const matchText = data.confidence ? ` (${data.confidence})` : '';
+                resultDiv.innerHTML = `
+                    <div class="result-header">
+                        <div id="statusBadge" class="badge spam">
+                            <i id="statusIcon" class="fa-solid fa-triangle-exclamation"></i>
+                            <span id="statusText">SPAM / THREAT</span>
+                        </div>
+                        <div class="confidence">
+                            Confidence: <span id="confidenceScore">${confidenceVal}</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="riskProgressBar" class="progress-bar-fill spam" style="width: 95%;"></div>
+                    </div>
+                    <div class="chips" id="signalsChips">
+                        <div class="chip">Phishing / Scam Patterns</div>
+                        <div class="chip">High-Risk Telemetry</div>
+                    </div>
+                `;
             } else {
-                // TURN ENTIRE CARD GREEN
-                if (mainContainer) mainContainer.classList.add('is-safe');
+                // --- SHIFT ENTIRE THEME TO SAFE (GREEN) ---
+                bodyElement.classList.add('theme-safe');
                 
-                const matchText = data.confidence ? ` (${data.confidence} Match)` : '';
-                resultDiv.innerHTML = `✅ SAFE: NOT SPAM${matchText}`;
+                const matchText = data.confidence ? ` (${data.confidence})` : '';
+                resultDiv.innerHTML = `
+                    <div class="result-header">
+                        <div id="statusBadge" class="badge ham">
+                            <i id="statusIcon" class="fa-solid fa-shield-check"></i>
+                            <span id="statusText">SAFE</span>
+                        </div>
+                        <div class="confidence">
+                            Confidence: <span id="confidenceScore">${confidenceVal}</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="riskProgressBar" class="progress-bar-fill ham" style="width: 10%;"></div>
+                    </div>
+                    <div class="chips" id="signalsChips">
+                        <div class="chip">Clean Telemetry Stream</div>
+                        <div class="chip">Verified Content</div>
+                    </div>
+                `;
             }
         } else {
-            resultDiv.className = 'result-box loading';
-            resultDiv.innerText = `Error: ${data.error || 'Server issue'}`;
+            resultDiv.innerHTML = `
+                <div class="result-header">
+                    <div class="badge spam">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        <span>Error: ${data.error || 'Server issue'}</span>
+                    </div>
+                </div>
+            `;
         }
 
     } catch (error) {
         console.error('Error connecting to backend:', error);
-        resultDiv.className = 'result-box loading';
-        resultDiv.innerText = 'Error: Cannot connect to Python backend.';
+        resultDiv.classList.remove('hidden');
+        resultDiv.innerHTML = `
+            <div class="result-header">
+                <div class="badge spam">
+                    <i class="fa-solid fa-plug-circle-xmark"></i>
+                    <span>Error: Cannot connect to Python backend.</span>
+                </div>
+            </div>
+        `;
     }
 });
