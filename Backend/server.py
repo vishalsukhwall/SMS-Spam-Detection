@@ -34,7 +34,6 @@ def predict():
     if not message.strip():
         return jsonify({"error": "Empty message"}), 400
 
-
     try:
         clean_msg = message.lower().strip()
 
@@ -73,3 +72,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
+    
