@@ -90,7 +90,8 @@ document.getElementById('checkBtn').addEventListener('click', async () => {
                     </div>
                 `;
             }
-        } else {
+        } else 
+            {
             resultDiv.innerHTML = `
                 <div class="result-header">
                     <div class="badge spam">
