@@ -34,6 +34,7 @@ def predict():
     if not message.strip():
         return jsonify({"error": "Empty message"}), 400
 
+
     try:
         clean_msg = message.lower().strip()
 
